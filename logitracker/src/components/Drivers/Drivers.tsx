@@ -3,7 +3,7 @@ import { driverData as drivers } from "../../mockData/driverMockData";
 import styles from "./drivers.module.css";
 import { formatTime } from "../../utils/DataTimeUtile";
 import { StatusBadge } from "../StatusBadge/StatusBadge";
-import { DriverInfoContext } from "../../Providers/Driver/DriverInfoProvider";
+import { DriverInfoContext } from "../../providers/Driver/DriverInfoProvider";
 
 const DriverDashboard: React.FC = () => {
   const { handleDriverSelection } = useContext(DriverInfoContext);

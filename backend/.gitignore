@@ -1,0 +1,71 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+/dist
+
+# TypeScript cache
+*.tsbuildinfo
+
+# environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# editor directories and files
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# cache
+.eslintcache
+.stylelintcache
+.cache/
+
+# misc
+.DS_Store
+Thumbs.db
+*.log
+
+# Vite specific (if using Vite)
+/.vite
+
+# Rollup specific (if using Rollup for build)
+/.rollup.cache
+
+# Project specific (commonly generated files)
+/storybook-static
+/stats.html
+*.local
+
+# yarn v2
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
