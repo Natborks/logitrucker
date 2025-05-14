@@ -2,11 +2,11 @@ import styles from "./header.module.css";
 
 // Header.tsx
 type HeaderProps = {
-  title: string;
+  children: React.ReactNode;
 };
 
-export const Header: React.FC<HeaderProps> = ({ title }) => (
+export const Header: React.FC<HeaderProps> = ({ children }) => (
   <div className={styles.header}>
-    <h1 className={styles.title}>{title}</h1>
+    <h1 className={styles.title}>{children}</h1>
   </div>
 );

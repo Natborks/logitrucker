@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import type Driver from "../types/Driver";
 import { DriverInfoDispatchContext } from "../providers/Driver/DriverInfoProvider";
 

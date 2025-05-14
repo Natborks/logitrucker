@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { driverData as drivers } from "../../mockData/driverMockData";
 import styles from "./drivers.module.css";
 import { formatTime } from "../../utils/DataTimeUtile";
 import { StatusBadge } from "../StatusBadge/StatusBadge";
@@ -43,7 +42,8 @@ const DriverDashboard: React.FC = () => {
                 </td>
                 <td>{formatTime(driver.eta)}</td>
                 <td>
-                  {driver.location.lat},{driver.location.lng}
+                  {driver.location.lat.toFixed(4)},
+                  {driver.location.lng.toFixed(4)}
                 </td>
               </tr>
             ))}
