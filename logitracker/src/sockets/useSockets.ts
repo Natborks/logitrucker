@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import type Driver from "../types/Driver";
+import { DriverInfoDispatchContext } from "../providers/Driver/DriverInfoProvider";
 
 type stateData = {
-  drivers: Driver[] | null;
+  driver: Driver | null;
 };
 function useSocketData() {
-  const [data, setData] = useState<stateData>();
+  const [data, _] = useState<stateData>();
+  const { handleDriverPositionUpdate } = useContext(DriverInfoDispatchContext);
 
   useEffect(() => {
     let socket = new WebSocket("ws://localhost:3000");
@@ -15,7 +17,7 @@ function useSocketData() {
     };
 
     socket.onmessage = (e) => {
-      //dispatch here
+      handleDriverPositionUpdate(JSON.parse(e.data));
       console.log(e);
     };
 
