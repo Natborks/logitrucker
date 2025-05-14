@@ -1,4 +1,4 @@
-import type Driver from "../types/Driver.js";
+import type Driver from "./Driver.js";
 
 export const driverData: Driver[] = [
   {

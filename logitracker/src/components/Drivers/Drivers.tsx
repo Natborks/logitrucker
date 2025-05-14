@@ -3,10 +3,14 @@ import { driverData as drivers } from "../../mockData/driverMockData";
 import styles from "./drivers.module.css";
 import { formatTime } from "../../utils/DataTimeUtile";
 import { StatusBadge } from "../StatusBadge/StatusBadge";
-import { DriverInfoContext } from "../../providers/Driver/DriverInfoProvider";
+import {
+  DriverInfoContext,
+  DriverInfoDispatchContext,
+} from "../../providers/Driver/DriverInfoProvider";
 
 const DriverDashboard: React.FC = () => {
   const { handleDriverSelection } = useContext(DriverInfoContext);
+  const { driverInfo } = useContext(DriverInfoDispatchContext);
 
   return (
     <div className={styles.container}>
@@ -25,7 +29,7 @@ const DriverDashboard: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {drivers.map((driver) => (
+            {driverInfo.map((driver) => (
               <tr key={driver.id} onClick={() => handleDriverSelection(driver)}>
                 <td>{driver.name}</td>
                 <td>
