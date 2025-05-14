@@ -1,0 +1,22 @@
+.statusActive {
+  background-color: #ecfdf5;
+  color: #059669;
+}
+
+.statusInactive {
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+.statusIdle {
+  background-color: #fffbeb;
+  color: #d97706;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}

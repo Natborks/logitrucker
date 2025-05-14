@@ -1,0 +1,16 @@
+.wrapper {
+  flex-basis: 350px;
+  height: 200px;
+}
+
+.statTitle {
+  color: #8e9196;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+}
