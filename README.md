@@ -50,6 +50,8 @@ Here are some of the improvements I would have liked to work on if I had the tim
 
 - Testing on both backend and frontend can be very helpful given the complex nature of state updates.
 
+- Show loading states, especially on initial page load.
+
 - Implementing offline support and sync mechanisms is a future goal, especially for environments with unstable connections.
 
 - Consider memoizing to reduce rerenders and improve performance in the DriverInfoProvier especially since a lot of global state is involved. Unsure of benefit given the number of times components changes due to socket data updates
