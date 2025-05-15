@@ -23,27 +23,37 @@ To get started, ensure you have Node.js and npm installed.
 
 ### Architectural Decisions
 
-The architectural design prioritizes simplicity, real-time feedback, and rapid prototyping. The backend sends data asychronuosly and the the fronted reads this data via websockets and updates the ui accordingly. The backend server uses the sockets library to achieve this. For this project my goal was to minimize the use of npm packages on the frontend and use API provided by react.
+The architectural design prioritizes simplicity, real-time feedback. The backend sends data asychronuosly and the the fronted reads this data via websockets and updates the ui accordingly. The backend server uses the sockets library to achieve this. For this project my goal was to minimize the use of npm packages on the frontend and use (as much as possible) API provided by react.
 
-1. React Context API and Reducer: The react contect API is very capable of managing global state. Given the scope of the project and the number of components, I felt It would be simpler to use a combination of both for global state management.
+1. React Context API and Reducer: The react contect API is very capable of managing global state. Given the scope of the project (pages involved) and my strong prefence for react-provided API, I felt It would be simpler to use a combination of Context API and Reducer for global state management.
 
-2. CSS modules for styling: I usually prefer CSS modules, or styled components for styling because of the use of raw css. Using something like tailwind add an additional layer of complexity in that, you have to know the tailwind API in addition
+2. Websocket communication over REST API: Given the time constraint, I decided to use webesocket only for communication to and from the backend.
+
+3. CSS modules for styling: I usually prefer CSS modules, or styled components for styling because of the use of raw css. Using something like tailwind add an additional layer of complexity in that, you have to know the tailwind API in addition
    to normal css, customizing colors and sizes can be tricky, and the styles for components can get bloated and mmake it harder to read components.
 
-3. I chose to use leaflet mainly becaue its free and easy to get started with
+4. Map: I chose to use leaflet mainly becaue its free and easy to get started with
 
-4. The absence of a database posed a significant challenge, and it meant that I had to maintain driver state on both the frontend and backend and keep them in sync, but doing so also allow for fast iteration. Ideally the the single source of truth for the driver data would be a backend database.
+5. Databases: The absence of a database posed a significant challenge, and it meant that I had to maintain driver state on both the frontend and backend and keep them in sync, but doing so also allow for fast iteration. Ideally the the single source of truth for the driver data would be a backend database.
 
 ### Limitations and further improvements
 
 Here are some of the improvements I would have liked to work on if I had the time:
 
+- Ansynchronous nature (lack of request response cycle) of websocket communication makes it extremely difficult to get back error states for unsuccessful write updates.
+
 - UI updates: Although I love the react team's wonderful philosophy of colocating state, styles, etc., to a component as much as possible, it can make styling harder to navigate. I've been exploring Andy Bell's [Every Layout](https://every-layout.dev/layouts/) which promotes a more scalable and composable approach to CSS architecture.
-- Adding a database (e.g., PostgreSQL or Redis) would greatly simplify state management and persistence, particularly in multi-session environments.
-- Manually handling optimistic updates is error-prone, especially with asynchronous state updates. Using tools like useOptimistic could help streamline this process
+
+- Adding a database (e.g., PostgreSQL or Redis) would greatly simplify state management and persistence.
+
+- Manually handling optimistic updates is error-prone, especially with asynchronous state updates. Using tools like useOptimistic could help streamline this process. Using a prompt dialog to get assignee disrupts optmistic UI update
+
 - Testing on both backend and frontend can be very helpful given the complex nature of state updates.
+
 - Implementing offline support and sync mechanisms is a future goal, especially for environments with unstable connections.
+
 - Consider memoizing to reduce rerenders and improve performance in the DriverInfoProvier especially since a lot of global state is involved. Unsure of benefit given the number of times components changes due to socket data updates
+
 - Improving the logic for showing the buttons for updating the driver state. Might need it's own reducer to manage the complext state
 
-Future enhancements could include adding persistent storage (e.g. Redis or PostgreSQL), formal schema validation (e.g. using Zod or Joi), role-based access, better fault tolerance, and a richer frontend UI with modals and analytics.
+- Futher improvents could include using husky to enforce linting, using zod for schema validation and using immer for reducer logic safety and simplification.

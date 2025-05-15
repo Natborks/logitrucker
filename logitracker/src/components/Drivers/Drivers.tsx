@@ -47,7 +47,7 @@ const DriverDashboard: React.FC = () => {
     sendUpdateViaSocket("COMPLETE", driverId);
   }
 
-  //consider using modal
+  //consider using modal. Prompt disrupts optimistic UI update
   function handleReassign(driverId: string) {
     const assignee: string | null =
       prompt("enter id of driver to reassign to") || null;
@@ -58,11 +58,15 @@ const DriverDashboard: React.FC = () => {
         return;
       }
 
-      reassingPackage(driverId, assignee);
-    }
+      const driver = drivers?.find((driver) => driver.id == driverId);
+      const count = driver ? driver.numDelivering : 0;
+      reassingPackage(driverId, assignee, 1);
 
-    if (socket.readyState === WebSocket.OPEN) {
-      socket.send(JSON.stringify({ type: "REASSIGN", driverId, assignee }));
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.send(
+          JSON.stringify({ type: "REASSIGNe", driverId, assignee, count })
+        );
+      }
     }
   }
 
