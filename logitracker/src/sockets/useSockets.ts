@@ -16,7 +16,7 @@ function useSocketData() {
     socket.onmessage = (e) => {
       try {
         const data = JSON.parse(e.data);
-        console.log(data);
+
         if (data.error) {
           alert("there was an error performing update. please try again");
           return;

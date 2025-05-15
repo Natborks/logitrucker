@@ -135,7 +135,9 @@ const DriverDashboard: React.FC = () => {
                       handlePauseClick(driver.id, driver.status);
                     }}
                   >
-                    {driver.status == "paused" || "idle" ? "resume" : "pause"}
+                    {driver.status == "paused" || driver.status == "idle"
+                      ? "resume"
+                      : "pause"}
                   </button>
                   {driver.status == "delivering" && (
                     <button
