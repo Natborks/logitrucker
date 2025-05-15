@@ -64,7 +64,7 @@ const DriverDashboard: React.FC = () => {
 
       if (socket.readyState === WebSocket.OPEN) {
         socket.send(
-          JSON.stringify({ type: "REASSIGNe", driverId, assignee, count })
+          JSON.stringify({ type: "REASSIGN", driverId, assignee, count })
         );
       }
     }
