@@ -14,9 +14,13 @@ function useSocketData() {
     };
 
     socket.onmessage = (e) => {
-      console.log(e);
       try {
         const data = JSON.parse(e.data);
+        console.log(data);
+        if (data.error) {
+          alert("there was an error performing update. please try again");
+          return;
+        }
         handleDriverPositionUpdate(data);
         setDriverData(data);
       } catch (err) {

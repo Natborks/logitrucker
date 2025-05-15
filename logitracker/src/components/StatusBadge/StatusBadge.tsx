@@ -1,7 +1,7 @@
 import styles from "./statusBadge.module.css";
 
 type StatusBadgeProps = {
-  status: "delivering" | "paused" | "idle";
+  status: "delivering" | "paused" | "idle" | "completed";
   className?: string;
 };
 
@@ -17,6 +17,8 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
         return styles.statusIdle;
       case "paused":
         return styles.statusInactive;
+      case "completed":
+        return styles.statusActive;
       default:
         throw new Error("Illegal state for status");
     }
