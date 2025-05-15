@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import LiveMap from "../LiveMap/Livemap";
 import { MapSidePanel } from "../MapSidePanel/MapSidePanel";
 import styles from "./mapdashboard.module.css";

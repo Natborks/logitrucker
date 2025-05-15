@@ -9,7 +9,7 @@ function useSocketData() {
   useEffect(() => {
     const socket = new WebSocket("ws://localhost:3000");
 
-    socket.onopen = (e) => {
+    socket.onopen = () => {
       console.log("Connection open");
     };
 
