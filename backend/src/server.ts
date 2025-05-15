@@ -88,7 +88,7 @@ wss.on("connection", function connection(ws) {
   const interval = setInterval(() => {
     const updatedDrivers = drivers.map((driver) => updateDriver(driver));
     ws.send(JSON.stringify(updatedDrivers));
-  }, 2000);
+  }, 4000);
 
   ws.on("close", () => clearInterval(interval));
 });
