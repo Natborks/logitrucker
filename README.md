@@ -4,7 +4,7 @@ This project is a real-time driver dispatch and monitoring system designed to si
 
 ## Setup Instuctions
 
-To get started, ensure you have Node.js and npm installed.
+To get started, ensure you have Node.js (version 18 and up recommended) and npm (version 10 and up recommended) installed.
 
 1. Clone the repository and navigate into the project directory.
 2. Start the backend WebSocket server:
@@ -56,4 +56,4 @@ Here are some of the improvements I would have liked to work on if I had the tim
 
 - Improving the logic for showing the buttons for updating the driver state. Might need it's own reducer to manage the complext state
 
-- Futher improvents could include using husky to enforce linting, using zod for schema validation and using immer for reducer logic safety and simplification.
+- Futher improvents could include containerizeing with docker, using husky to enforce linting, using zod for schema validation and using immer for reducer logic safety and simplification.
