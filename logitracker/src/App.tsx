@@ -1,7 +1,7 @@
-import Dashboard from "./components/Dashboard/Dashboard";
+import Home from "./pages/Home/Home";
 
 function App() {
-  return <Dashboard />;
+  return <Home />;
 }
 
 export default App;

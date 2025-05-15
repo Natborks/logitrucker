@@ -1,5 +1,5 @@
 .wrapper {
-  flex-basis: 350px;
+  flex: 1;
 }
 
 .statTitle {

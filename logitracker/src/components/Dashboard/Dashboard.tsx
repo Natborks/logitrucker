@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./Dashboard.module.css";
-import Sidebar from "../Sidebar/Sidebar";
-import DriverDashboard from "../Drivers/Drivers";
-import MapDashboard from "../MapDashboard/MapDashboard";
+import Sidebar from "../../components/Sidebar/Sidebar";
+import DriverDashboard from "../../components/Drivers/Drivers";
+import MapDashboard from "../../components/MapDashboard/MapDashboard";
 import DriverInfoProvider from "../../providers/Driver/DriverInfoProvider";
-import { Header } from "../Header/Header";
+import { Header } from "../../components/Header/Header";
 
 const Dashboard: React.FC = () => {
   return (

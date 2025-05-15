@@ -1,13 +1,14 @@
 import { createContext, useReducer, useState } from "react";
 import type Driver from "../../types/Driver";
 import { driverData as drivers } from "../../mockData/driverMockData";
+import useSocketData from "../../sockets/useSockets";
 type DriverInfoContextType = {
   handleDriverSelection: (driver: Driver) => void;
   selectedDriver: Driver | undefined;
 };
 
 type DriverInfoDispatchContextType = {
-  handleDriverPositionUpdate: (driver: Driver) => void;
+  handleDriverPositionUpdate: (drivers: Driver[]) => void;
   driverInfo: Driver[];
 };
 
@@ -30,15 +31,19 @@ function DriverInfoProvider({ children }: DriverInfoProviderProps) {
   const [selectedDriver, setSelectedDriver] = useState<Driver | undefined>(
     undefined
   );
-  const [driverInfo, dispatch] = useReducer(driverLocationReducer, drivers);
+  const { driverData } = useSocketData();
+  const [driverInfo, dispatch] = useReducer(
+    driverLocationReducer,
+    driverData ?? drivers
+  );
 
   //pricinple of least privilege
   function handleDriverSelection(driver: Driver) {
     setSelectedDriver(driver);
   }
 
-  function handleDriverPositionUpdate(driver: Driver) {
-    dispatch({ id: driver.id, driver, type: "DRIVER_UPDATED" });
+  function handleDriverPositionUpdate(drivers: Driver[]) {
+    dispatch({ drivers, type: "DRIVERS_UPDATED" });
   }
 
   return (
@@ -46,7 +51,10 @@ function DriverInfoProvider({ children }: DriverInfoProviderProps) {
       value={{ handleDriverSelection, selectedDriver }}
     >
       <DriverInfoDispatchContext.Provider
-        value={{ driverInfo, handleDriverPositionUpdate }}
+        value={{
+          driverInfo,
+          handleDriverPositionUpdate,
+        }}
       >
         {children}
       </DriverInfoDispatchContext.Provider>
@@ -55,30 +63,19 @@ function DriverInfoProvider({ children }: DriverInfoProviderProps) {
 }
 
 type Action = {
-  type: "DRIVER_UPDATED";
-  id: string;
-  driver: Driver;
+  type: string;
+  drivers: Driver[];
 };
 
 type ReducerType = (drivers: Driver[], action: Action) => Driver[];
 
 const driverLocationReducer: ReducerType = (drivers, action) => {
   switch (action.type) {
-    case "DRIVER_UPDATED": {
-      return drivers.map((driver) =>
-        driver.id === action.driver.id
-          ? {
-              ...driver,
-              location: {
-                lat: action.driver.location.lat,
-                lng: action.driver.location.lng,
-              },
-            }
-          : driver
-      );
+    case "DRIVERS_UPDATED": {
+      return action.drivers;
     }
     default: {
-      throw new Error("Unknown action: " + (action as any).type);
+      return drivers;
     }
   }
 };
