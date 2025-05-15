@@ -65,10 +65,11 @@ wss.on("connection", function connection(ws) {
       case "REASSIGN": {
         const driver = drivers.find((d) => d.id === message.driverId);
         const assignee = drivers.find((d) => d.id === message.assignee);
+
         if (driver && assignee) {
           driver.numDelivering = 0;
           driver.status = "idle";
-          assignee.numDelivering += 1;
+          assignee.numDelivering += message.count;
         }
         break;
       }
@@ -88,7 +89,7 @@ wss.on("connection", function connection(ws) {
   const interval = setInterval(() => {
     const updatedDrivers = drivers.map((driver) => updateDriver(driver));
     ws.send(JSON.stringify(updatedDrivers));
-  }, 4000);
+  }, 1000);
 
   ws.on("close", () => clearInterval(interval));
 });
