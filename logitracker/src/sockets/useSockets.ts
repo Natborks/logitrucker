@@ -1,48 +1,53 @@
-import React, { useContext, useEffect, useState } from "react";
-import type Driver from "../types/Driver";
+import { useContext, useEffect, useState } from "react";
 import { DriverInfoDispatchContext } from "../providers/Driver/DriverInfoProvider";
+import type Driver from "../types/Driver";
 
-type stateData = {
-  driver: Driver | null;
-};
 function useSocketData() {
-  const [data, _] = useState<stateData>();
   const { handleDriverPositionUpdate } = useContext(DriverInfoDispatchContext);
+  const [driverData, setDriverData] = useState<Driver[]>();
 
   useEffect(() => {
-    let socket = new WebSocket("ws://localhost:3000");
+    const socket = new WebSocket("ws://localhost:3000");
 
-    socket.onopen = () => {
-      console.log("websocket opened");
+    socket.onopen = (e) => {
+      console.log("Connection open");
     };
 
     socket.onmessage = (e) => {
-      handleDriverPositionUpdate(JSON.parse(e.data));
-      console.log(e);
+      try {
+        const data = JSON.parse(e.data);
+
+        if (data.error) {
+          alert("there was an error performing update. please try again");
+          return;
+        }
+        handleDriverPositionUpdate(data);
+        setDriverData(data);
+      } catch (err) {
+        console.error("Failed to parse WebSocket message:", e.data);
+      }
     };
 
     socket.onerror = (e) => {
-      console.log("error", e);
+      console.error(" WebSocket error:", e);
     };
 
-    function handleSocketClose(event: CloseEvent) {
+    socket.onclose = (event) => {
       if (event.wasClean) {
         console.log(
           `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`
         );
       } else {
-        console.log("[close] Connection died");
+        console.warn("[close] Connection died unexpectedly");
       }
-
-      alert("Error with backend connection");
-    }
+    };
 
     return () => {
-      socket.onclose = handleSocketClose;
+      socket.close();
     };
   }, []);
 
-  return { data };
+  return { driverData };
 }
 
 export default useSocketData;

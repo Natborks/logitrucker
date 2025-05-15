@@ -1,21 +1,23 @@
 import React from "react";
 import styles from "./Dashboard.module.css";
-import Sidebar from "../Sidebar/Sidebar";
-import Router from "../Router/Router";
-import DriverDashboard from "../Drivers/Drivers";
-import MapDashboard from "../MapDashboard/MapDashboard";
+import Sidebar from "../../components/Sidebar/Sidebar";
+import DriverDashboard from "../../components/Drivers/Drivers";
+import MapDashboard from "../../components/MapDashboard/MapDashboard";
 import DriverInfoProvider from "../../providers/Driver/DriverInfoProvider";
+import { Header } from "../../components/Header/Header";
 
 const Dashboard: React.FC = () => {
   return (
-    <div className={styles.container}>
+    <div className={styles.home}>
       <Sidebar />
-      <Router>
+      <main className={styles.main}>
+        <Header>Dashboard</Header>
+
         <DriverInfoProvider>
           <MapDashboard />
           <DriverDashboard />
         </DriverInfoProvider>
-      </Router>
+      </main>
     </div>
   );
 };

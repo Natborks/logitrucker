@@ -1,57 +1,94 @@
 // server.js
 import { WebSocketServer } from "ws";
-import { driverData as drivers } from "./driverMockData.js";
+import { driverData } from "./driverMockData.js";
+import Driver from "./Driver.js";
 
 const PORT = 3000;
 const wss = new WebSocketServer({ port: PORT });
 
-console.log(`✅ WebSocket server running at ws://localhost:${PORT}`);
+console.log(` WebSocket server running at ws://localhost:${PORT}`);
 
 const STEP = 0.0001;
 
-const directionOptions = [
-  { lat: 1, lng: 0 },
-  { lat: -1, lng: 0 },
-  { lat: 0, lng: 1 },
-  { lat: 0, lng: -1 },
-  { lat: 1, lng: 1 },
-  { lat: -1, lng: -1 },
-  { lat: -1, lng: 1 },
-  { lat: 1, lng: -1 },
-];
-
-// Store driver state and direction
-const driverStates = drivers.map((driver) => ({
-  ...driver,
-  direction: getRandomDirection(),
-}));
-
-function getRandomDirection() {
-  return directionOptions[Math.floor(Math.random() * directionOptions.length)];
-}
-
-function updateRandomDriver() {
-  const i = Math.floor(Math.random() * driverStates.length);
-  const driver = driverStates[i];
-
-  if (Math.random() < 0.1) {
-    driver.direction = getRandomDirection();
+function updateDriver(driver: Driver) {
+  if (driver.status == "delivering") {
+    driver.location.lat += STEP * 1;
+    driver.location.lng += STEP * -1;
   }
-
-  driver.location.lat += STEP * driver.direction.lat;
-  driver.location.lng += STEP * driver.direction.lng;
 
   return driver;
 }
 
+var drivers = driverData;
+
 wss.on("connection", function connection(ws) {
   ws.on("error", console.error);
-  ws.on("message", (data) => console.log("received:", data.toString()));
+
+  ws.on("message", (data) => {
+    const message = JSON.parse(data.toString());
+    let response;
+
+    switch (message.type) {
+      case "PAUSE": {
+        const driver = drivers.find((d) => d.id === message.data);
+        if (driver) {
+          driver.status = "paused";
+        }
+        break;
+      }
+
+      case "RESUME": {
+        const driver = drivers.find((d) => d.id === message.data);
+        if (driver) {
+          driver.status = "delivering";
+        }
+        break;
+      }
+
+      case "FILTER": {
+        drivers = driverData.filter((d) =>
+          message.data == "all" ? true : d.status == message.data
+        );
+
+        break;
+      }
+
+      case "COMPLETE": {
+        const driver = drivers.find((d) => d.id === message.data);
+        if (driver) {
+          driver.status = "completed";
+          driver.numDelivering = 0;
+        }
+        break;
+      }
+
+      case "REASSIGN": {
+        const driver = drivers.find((d) => d.id === message.driverId);
+        const assignee = drivers.find((d) => d.id === message.assignee);
+        if (driver && assignee) {
+          driver.numDelivering = 0;
+          driver.status = "idle";
+          assignee.numDelivering += 1;
+        }
+        break;
+      }
+
+      default:
+        {
+          console.log("setting error response");
+          response = {
+            error: true,
+          };
+          ws.send(JSON.stringify(response));
+        }
+        break;
+    }
+  });
 
   const interval = setInterval(() => {
-    const updatedDriver = updateRandomDriver();
-    ws.send(JSON.stringify(updatedDriver));
-  }, 1000);
+    const updatedDrivers = drivers.map((driver) => updateDriver(driver));
+    ws.send(JSON.stringify(updatedDrivers));
+  }, 2000);
 
   ws.on("close", () => clearInterval(interval));
 });
