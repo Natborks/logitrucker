@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useMemo, useOptimistic, useState } from "react";
 import styles from "./drivers.module.css";
 import { formatTime } from "../../utils/DataTimeUtile";
 import { StatusBadge } from "../StatusBadge/StatusBadge";
@@ -11,7 +11,6 @@ import { getSocket } from "../../sockets/Socket";
 const DriverDashboard: React.FC = () => {
   const { handleDriverSelection } = useContext(DriverInfoContext);
   const [filterStatus, setFilterStatus] = useState<string>("all");
-
   const {
     driverInfo: drivers,
     pauseDriver,
@@ -130,7 +129,9 @@ const DriverDashboard: React.FC = () => {
                 <td>
                   {/* consider cleaning up */}
                   <button
-                    disabled={driver.status == "completed"}
+                    disabled={
+                      driver.status == "completed" || driver.numDelivering == 0
+                    }
                     onClick={() => {
                       handlePauseClick(driver.id, driver.status);
                     }}

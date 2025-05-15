@@ -1,6 +1,5 @@
 import { createContext, useReducer, useState } from "react";
 import type Driver from "../../types/Driver";
-import { driverData as drivers } from "../../mockData/driverMockData";
 import useSocketData from "../../sockets/useSockets";
 type DriverInfoContextType = {
   handleDriverSelection: (driver: Driver) => void;
@@ -29,7 +28,7 @@ export const DriverInfoContext = createContext<DriverInfoContextType>({
 export const DriverInfoDispatchContext =
   createContext<DriverInfoDispatchContextType>({
     handleDriverPositionUpdate: () => {},
-    driverInfo: drivers,
+    driverInfo: [],
     pauseDriver: (driverId: string) => {},
     resumeDriver: (driverId: string) => {},
     completeTrip: (driverId: string) => {},
@@ -69,12 +68,20 @@ function DriverInfoProvider({ children }: DriverInfoProviderProps) {
   }
 
   function reassign(driverId: string, assignee: string) {
-    dispatch({ type: "REASSIGN", driverId, assignee });
+    const driver = driverData?.find((driver) => driver.id == driverId);
+    const count = driver ? driver.numDelivering : 0;
+    dispatch({
+      type: "REASSIGN",
+      driverId,
+      assignee,
+      count,
+    });
   }
 
   function filter(filterType: string) {
     dispatch({ type: "FILTER", filter: filterType });
   }
+
   return (
     <DriverInfoContext.Provider
       value={{ handleDriverSelection, selectedDriver }}
@@ -102,7 +109,7 @@ type Action =
   | { type: "PAUSE_DRIVER"; driverId: string }
   | { type: "RESUME_DRIVER"; driverId: string }
   | { type: "COMPLETE_TRIP"; driverId: string }
-  | { type: "REASSIGN"; driverId: string; assignee: string }
+  | { type: "REASSIGN"; driverId: string; assignee: string; count: number | 0 }
   | { type: "FILTER"; filter: string };
 
 type ReducerType = (drivers: Driver[], action: Action) => Driver[];
@@ -131,7 +138,7 @@ const driverLocationReducer: ReducerType = (drivers, action) => {
     case "REASSIGN":
       return drivers.map((driver) => {
         if (driver.id === action.driverId) {
-          return { ...driver, numDelivering: 0 };
+          return { ...driver, numDelivering: 0, status: "idle" };
         } else if (driver.id === action.assignee) {
           return { ...driver, numDelivering: driver.numDelivering + 1 };
         }

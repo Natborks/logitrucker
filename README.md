@@ -11,6 +11,7 @@ To get started, ensure you have Node.js and npm installed.
 
    - Navigate to the `backend` directory.
    - Run `npm install` to install dependencies.
+   - Run `npm run build` to build project
    - Start the server with `npm run start`.
    - The WebSocket server will be available at `ws://localhost:3000`.
 
@@ -31,14 +32,18 @@ The architectural design prioritizes simplicity, real-time feedback, and rapid p
 
 3. I chose to use leaflet mainly becaue its free and easy to get started with
 
-4. The absence of a database posed a significant challenge, and it meant that I had to maintain driver state on both the frontend and backend and keep them in sync, but doing so also allow for fast iteration.
+4. The absence of a database posed a significant challenge, and it meant that I had to maintain driver state on both the frontend and backend and keep them in sync, but doing so also allow for fast iteration. Ideally the the single source of truth for the driver data would be a backend database.
 
 ### Limitations and further improvements
 
+Here are some of the improvements I would have liked to work on if I had the time:
+
 - UI updates: Although I love the react team's wonderful philosophy of colocating state, styles, etc., to a component as much as possible, it can make styling harder to navigate. I've been exploring Andy Bell's [Every Layout](https://every-layout.dev/layouts/) which promotes a more scalable and composable approach to CSS architecture.
 - Adding a database (e.g., PostgreSQL or Redis) would greatly simplify state management and persistence, particularly in multi-session environments.
-- Manually handling optimistic updates is error-prone, especially with asynchronous state updates. Using tools like useOptimistic (experimental in React) could help streamline this process
+- Manually handling optimistic updates is error-prone, especially with asynchronous state updates. Using tools like useOptimistic could help streamline this process
 - Testing on both backend and frontend can be very helpful given the complex nature of state updates.
-- mplementing offline support and sync mechanisms is a future goal, especially for environments with unstable connections.
+- Implementing offline support and sync mechanisms is a future goal, especially for environments with unstable connections.
+- Consider memoizing to reduce rerenders and improve performance in the DriverInfoProvier especially since a lot of global state is involved. Unsure of benefit given the number of times components changes due to socket data updates
+- Improving the logic for showing the buttons for updating the driver state. Might need it's own reducer to manage the complext state
 
 Future enhancements could include adding persistent storage (e.g. Redis or PostgreSQL), formal schema validation (e.g. using Zod or Joi), role-based access, better fault tolerance, and a richer frontend UI with modals and analytics.
