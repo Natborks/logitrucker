@@ -1,6 +1,7 @@
 // server.js
 import { WebSocketServer } from "ws";
 import { driverData as drivers } from "./driverMockData.js";
+import Driver from "./Driver.js";
 
 const PORT = 3000;
 const wss = new WebSocketServer({ port: PORT });
@@ -30,27 +31,26 @@ function getRandomDirection() {
   return directionOptions[Math.floor(Math.random() * directionOptions.length)];
 }
 
-function updateRandomDriver() {
-  const i = Math.floor(Math.random() * driverStates.length);
-  const driver = driverStates[i];
+function updateDriver(driver: Driver) {
+  const direction = getRandomDirection();
 
-  if (Math.random() < 0.1) {
-    driver.direction = getRandomDirection();
-  }
-
-  driver.location.lat += STEP * driver.direction.lat;
-  driver.location.lng += STEP * driver.direction.lng;
+  driver.location.lat += STEP * direction.lat;
+  driver.location.lng += STEP * direction.lng;
 
   return driver;
 }
+
+wss.on("open", function open(ws) {
+  ws.send("something");
+});
 
 wss.on("connection", function connection(ws) {
   ws.on("error", console.error);
   ws.on("message", (data) => console.log("received:", data.toString()));
 
   const interval = setInterval(() => {
-    const updatedDriver = updateRandomDriver();
-    ws.send(JSON.stringify(updatedDriver));
+    const updatedDrivers = drivers.map((driver) => updateDriver(driver));
+    ws.send(JSON.stringify(updatedDrivers));
   }, 1000);
 
   ws.on("close", () => clearInterval(interval));
